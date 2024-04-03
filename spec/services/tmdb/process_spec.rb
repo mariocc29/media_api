@@ -18,16 +18,16 @@ RSpec.describe Tmdb::Process do
     end
 
     describe '#get' do
-      let(:response) { "[{\"title\":\"#{resource}\"}]" }
+      let(:response) { TmdbMovieFixture::API_RESPONSE }
 
       before do
         allow_any_instance_of(Net::HTTP)
           .to receive(:request)
-          .and_return(OpenStruct.new(read_body: response))
+          .and_return(OpenStruct.new(read_body: response.to_json))
       end
 
       it 'sends a GET request to the API and returns parsed JSON response' do
-        expect(subject.get).to include_json(JSON.parse(response))
+        expect(subject.get).to include_json(response)
       end
     end
 
@@ -52,7 +52,7 @@ RSpec.describe Tmdb::Process do
 
   context 'with a type of media `movie`' do
     let(:type_of_media) { 'movie' }
-    let(:resource) { Faker::Movie.title.encode('ASCII', 'UTF-8', invalid: :replace, undef: :replace, replace: '') }
+    let(:resource) { TmdbMovieFixture::TITLE }
 
     it_behaves_like 'Tmdb::Process behavior'
   end

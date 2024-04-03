@@ -5,7 +5,7 @@ require 'rails_helper'
 RSpec.describe Tmdb::Handler do
   describe('#get') do
     let(:process) { instance_double('Tmdb::Process') }
-    let(:expected_result) { [{ 'title': resource }] }
+    let(:expected_result) { TmdbMovieFixture::API_RESPONSE }
 
     before :each do
       allow(Tmdb::Process).to receive(:new).with(type_of_media, resource).and_return(process)
@@ -14,7 +14,7 @@ RSpec.describe Tmdb::Handler do
 
     context 'with a type of media `movie`' do
       let(:type_of_media) { 'movie' }
-      let(:resource) { Faker::Movie.title }
+      let(:resource) { TmdbMovieFixture::TITLE }
 
       it 'returns a list of a resource' do
         expect(described_class.get(type_of_media, resource)).to include_json(expected_result)
