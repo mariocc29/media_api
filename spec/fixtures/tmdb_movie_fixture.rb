@@ -1,5 +1,5 @@
 module TmdbMovieFixture
-  TITLE = Faker::Movie.title.encode('ASCII', 'UTF-8', invalid: :replace, undef: :replace, replace: '')
+  TITLE = Faker::Movie.title
   
   API_RESPONSE = {
     page: 1,

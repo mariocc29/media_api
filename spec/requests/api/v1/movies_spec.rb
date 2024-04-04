@@ -5,6 +5,12 @@ RSpec.describe Api::V1::MoviesController, type: :request do
     get 'Retrieves a list of movies' do
       produces 'application/json'
       parameter name: :name, in: :query, type: :string
+      parameter name: :include_adult, in: :query, type: :boolean, required: false
+      parameter name: :language, in: :query, type: :string, required: false
+      parameter name: :primary_release_year, in: :query, type: :string, required: false
+      parameter name: :page, in: :query, type: :integer, required: false
+      parameter name: :region, in: :query, type: :string, required: false
+      parameter name: :year, in: :query, type: :string, required: false
       response '200', 'Returns a list of movies' do
         schema '$ref' => '#/components/schemas/movies'
 

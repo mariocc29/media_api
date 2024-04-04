@@ -3,23 +3,20 @@
 require 'rails_helper'
 
 RSpec.describe Tmdb::Process do
-  subject { described_class.new(type_of_media, resource) }
+  subject { described_class.new(type_of_media, querystring) }
+
+  let(:querystring) { instance_double('Tmdb::QuerystringBuilderProcess') }
 
   shared_examples 'Tmdb::Process behavior' do
     describe '#initialize' do
       it 'initializes with type_of_media and resource_name', :aggregate_failures do
         url = subject.instance_variable_get(:@url)
-        query_params = CGI.parse(url.query)
-
         expect(url).to be_an_instance_of(URI::HTTPS)
         expect(url.path).to include("/#{type_of_media}")
-        expect(query_params['query']).to include(resource)
       end
     end
 
     describe '#get' do
-      let(:response) { TmdbMovieFixture::API_RESPONSE }
-
       before do
         allow_any_instance_of(Net::HTTP)
           .to receive(:request)
@@ -52,7 +49,12 @@ RSpec.describe Tmdb::Process do
 
   context 'with a type of media `movie`' do
     let(:type_of_media) { 'movie' }
-    let(:resource) { TmdbMovieFixture::TITLE }
+    let(:response) { TmdbMovieFixture::API_RESPONSE }
+
+    before :each do
+      allow(Tmdb::QuerystringBuilderProcess).to receive(:new).and_return(querystring)
+      allow(querystring).to receive(:build).and_return( "query=#{TmdbMovieFixture::TITLE}" )
+    end
 
     it_behaves_like 'Tmdb::Process behavior'
   end
