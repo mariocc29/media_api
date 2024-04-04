@@ -16,7 +16,7 @@ The purpose of this application is to connect to [TMDB API](https://developer.th
 1. To initialize the project, use the following command:
 
 ```bash
-  rails new pokemon_api --api -d postgresql -T
+  rails new media_api --api -d postgresql -T
 ```
 
 ## Technologies
